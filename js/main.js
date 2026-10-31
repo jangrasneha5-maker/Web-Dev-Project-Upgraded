@@ -127,4 +127,152 @@ for (var c = 0; c < revealItems.length; c++) {
   addCssClass(revealItems[c], "is-visible");
 }
 
+// 4. MUSIC TRACK SELECTION
 // --------------------------------------------------
+var tracks = {
+  midnight: {
+    src: "assets/audio/midnight-dreams.mp3"
+  },
+  electric: {
+    src: "assets/audio/electric-nights.mp3"
+  },
+  lost: {
+    src: "assets/audio/lost-in-sound.mp3"
+  }
+};
+
+var audioPlayer = document.getElementById("audio-player");
+var playerTitle = document.getElementById("player-title");
+var playerStatus = document.getElementById("player-status");
+var playButtons = document.getElementsByClassName("play-button");
+
+function selectTrack(button) {
+  var trackId = button.getAttribute("data-track");
+  var track = tracks[trackId];
+
+  if (audioPlayer == null || track == null) {
+    return;
+  }
+
+  var albumArt = button.parentElement;
+  var musicCard = albumArt.parentElement;
+  var titleElement = musicCard.getElementsByTagName("h3")[0];
+  var selectedTitle = "";
+
+  if (titleElement != null) {
+    selectedTitle = titleElement.textContent;
+  }
+
+  audioPlayer.setAttribute("src", track.src);
+  audioPlayer.setAttribute("controls", "controls");
+  addCssClass(audioPlayer, "audio-ready");
+
+  if (playerTitle != null) {
+    playerTitle.textContent = selectedTitle;
+  }
+
+  if (playerStatus != null) {
+    playerStatus.textContent =
+      "Track selected. Use the audio controls to start playback.";
+  }
+
+  for (var d = 0; d < playButtons.length; d++) {
+    var currentButton = playButtons[d];
+    var currentCard = currentButton.parentElement.parentElement;
+    var playIcons = currentButton.getElementsByClassName("play-icon");
+
+    if (currentButton === button) {
+      addCssClass(currentButton, "is-selected");
+      addCssClass(currentCard, "is-selected");
+      currentButton.setAttribute("aria-pressed", "true");
+
+      if (playIcons.length > 0) {
+        playIcons[0].textContent = "✓";
+      }
+    } else {
+      removeCssClass(currentButton, "is-selected");
+      removeCssClass(currentCard, "is-selected");
+      currentButton.setAttribute("aria-pressed", "false");
+
+      if (playIcons.length > 0) {
+        playIcons[0].textContent = "▶";
+      }
+    }
+  }
+}
+
+for (let e = 0; e < playButtons.length; e++) {
+  playButtons[e].addEventListener("click", function () {
+    selectTrack(playButtons[e]);
+  });
+}
+// --------------------------------------------------
+// 5. MUSIC CATALOGUE SEARCH AND FILTER
+// --------------------------------------------------
+var musicSearch = document.getElementById("music-search");
+var genreFilter = document.getElementById("genre-filter");
+var catalogueCards = document.getElementsByClassName("catalogue-card");
+var musicResults = document.getElementById("music-results");
+var noMusicResults = document.getElementById("no-music-results");
+
+function filterMusic() {
+  var searchValue = "";
+  var selectedGenre = "all";
+  var visibleCount = 0;
+
+  if (musicSearch != null) {
+    searchValue = musicSearch.value.toLowerCase().trim();
+  }
+
+  if (genreFilter != null) {
+    selectedGenre = genreFilter.value;
+  }
+
+  for (var f = 0; f < catalogueCards.length; f++) {
+    var card = catalogueCards[f];
+    var title = card.getAttribute("data-title");
+    var genre = card.getAttribute("data-genre");
+
+    var matchesSearch =
+      searchValue === "" ||
+      (title != null && title.indexOf(searchValue) !== -1);
+
+    var matchesGenre =
+      selectedGenre === "all" ||
+      genre === selectedGenre;
+
+    if (matchesSearch && matchesGenre) {
+      card.removeAttribute("hidden");
+      visibleCount++;
+    } else {
+      card.setAttribute("hidden", "hidden");
+    }
+  }
+
+  if (musicResults != null) {
+    if (visibleCount === catalogueCards.length) {
+      musicResults.textContent = "Showing all releases";
+    } else if (visibleCount === 1) {
+      musicResults.textContent = "Showing 1 release";
+    } else {
+      musicResults.textContent =
+        "Showing " + visibleCount + " releases";
+    }
+  }
+
+  if (noMusicResults != null) {
+    if (visibleCount === 0) {
+      noMusicResults.removeAttribute("hidden");
+    } else {
+      noMusicResults.setAttribute("hidden", "hidden");
+    }
+  }
+}
+
+if (musicSearch != null) {
+  musicSearch.addEventListener("input", filterMusic);
+}
+
+if (genreFilter != null) {
+  genreFilter.addEventListener("change", filterMusic);
+}
