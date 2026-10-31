@@ -206,3 +206,73 @@ for (let e = 0; e < playButtons.length; e++) {
     selectTrack(playButtons[e]);
   });
 }
+// --------------------------------------------------
+// 5. MUSIC CATALOGUE SEARCH AND FILTER
+// --------------------------------------------------
+var musicSearch = document.getElementById("music-search");
+var genreFilter = document.getElementById("genre-filter");
+var catalogueCards = document.getElementsByClassName("catalogue-card");
+var musicResults = document.getElementById("music-results");
+var noMusicResults = document.getElementById("no-music-results");
+
+function filterMusic() {
+  var searchValue = "";
+  var selectedGenre = "all";
+  var visibleCount = 0;
+
+  if (musicSearch != null) {
+    searchValue = musicSearch.value.toLowerCase().trim();
+  }
+
+  if (genreFilter != null) {
+    selectedGenre = genreFilter.value;
+  }
+
+  for (var f = 0; f < catalogueCards.length; f++) {
+    var card = catalogueCards[f];
+    var title = card.getAttribute("data-title");
+    var genre = card.getAttribute("data-genre");
+
+    var matchesSearch =
+      searchValue === "" ||
+      (title != null && title.indexOf(searchValue) !== -1);
+
+    var matchesGenre =
+      selectedGenre === "all" ||
+      genre === selectedGenre;
+
+    if (matchesSearch && matchesGenre) {
+      card.removeAttribute("hidden");
+      visibleCount++;
+    } else {
+      card.setAttribute("hidden", "hidden");
+    }
+  }
+
+  if (musicResults != null) {
+    if (visibleCount === catalogueCards.length) {
+      musicResults.textContent = "Showing all releases";
+    } else if (visibleCount === 1) {
+      musicResults.textContent = "Showing 1 release";
+    } else {
+      musicResults.textContent =
+        "Showing " + visibleCount + " releases";
+    }
+  }
+
+  if (noMusicResults != null) {
+    if (visibleCount === 0) {
+      noMusicResults.removeAttribute("hidden");
+    } else {
+      noMusicResults.setAttribute("hidden", "hidden");
+    }
+  }
+}
+
+if (musicSearch != null) {
+  musicSearch.addEventListener("input", filterMusic);
+}
+
+if (genreFilter != null) {
+  genreFilter.addEventListener("change", filterMusic);
+}
