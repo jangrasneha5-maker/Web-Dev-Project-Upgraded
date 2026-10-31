@@ -127,4 +127,82 @@ for (var c = 0; c < revealItems.length; c++) {
   addCssClass(revealItems[c], "is-visible");
 }
 
+// 4. MUSIC TRACK SELECTION
 // --------------------------------------------------
+var tracks = {
+  midnight: {
+    src: "assets/audio/midnight-dreams.mp3"
+  },
+  electric: {
+    src: "assets/audio/electric-nights.mp3"
+  },
+  lost: {
+    src: "assets/audio/lost-in-sound.mp3"
+  }
+};
+
+var audioPlayer = document.getElementById("audio-player");
+var playerTitle = document.getElementById("player-title");
+var playerStatus = document.getElementById("player-status");
+var playButtons = document.getElementsByClassName("play-button");
+
+function selectTrack(button) {
+  var trackId = button.getAttribute("data-track");
+  var track = tracks[trackId];
+
+  if (audioPlayer == null || track == null) {
+    return;
+  }
+
+  var albumArt = button.parentElement;
+  var musicCard = albumArt.parentElement;
+  var titleElement = musicCard.getElementsByTagName("h3")[0];
+  var selectedTitle = "";
+
+  if (titleElement != null) {
+    selectedTitle = titleElement.textContent;
+  }
+
+  audioPlayer.setAttribute("src", track.src);
+  audioPlayer.setAttribute("controls", "controls");
+  addCssClass(audioPlayer, "audio-ready");
+
+  if (playerTitle != null) {
+    playerTitle.textContent = selectedTitle;
+  }
+
+  if (playerStatus != null) {
+    playerStatus.textContent =
+      "Track selected. Use the audio controls to start playback.";
+  }
+
+  for (var d = 0; d < playButtons.length; d++) {
+    var currentButton = playButtons[d];
+    var currentCard = currentButton.parentElement.parentElement;
+    var playIcons = currentButton.getElementsByClassName("play-icon");
+
+    if (currentButton === button) {
+      addCssClass(currentButton, "is-selected");
+      addCssClass(currentCard, "is-selected");
+      currentButton.setAttribute("aria-pressed", "true");
+
+      if (playIcons.length > 0) {
+        playIcons[0].textContent = "✓";
+      }
+    } else {
+      removeCssClass(currentButton, "is-selected");
+      removeCssClass(currentCard, "is-selected");
+      currentButton.setAttribute("aria-pressed", "false");
+
+      if (playIcons.length > 0) {
+        playIcons[0].textContent = "▶";
+      }
+    }
+  }
+}
+
+for (let e = 0; e < playButtons.length; e++) {
+  playButtons[e].addEventListener("click", function () {
+    selectTrack(playButtons[e]);
+  });
+}
