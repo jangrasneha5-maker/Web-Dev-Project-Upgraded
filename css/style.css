@@ -1715,6 +1715,15 @@ h2 {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--muted);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.search-field:focus-within,
+.select-field:focus-within {
+  border-color: var(--accent);
+  background: #171717;
 }
 
 .search-field>span[aria-hidden="true"] {
@@ -1769,6 +1778,26 @@ h2 {
   row-gap: 36px;
 }
 
+.catalogue-card {
+  position: relative;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.catalogue-card:hover {
+  transform: translateY(-4px);
+}
+
+.catalogue-card.is-selected .album-art {
+  outline: 1px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.catalogue-card.is-selected .music-info h3 {
+  color: var(--accent);
+}
+
 .release-description {
   margin-top: 10px;
   color: #8d8985;
@@ -1785,6 +1814,10 @@ h2 {
   font-size: 12px;
 }
 
+.empty-state[hidden] {
+  display: none;
+}
+
 .music-note,
 .shows-note {
   margin-top: 24px;
@@ -1795,6 +1828,66 @@ h2 {
 
 .music-note code {
   color: var(--accent);
+}
+
+.play-button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.play-button.is-selected {
+  background: #fff;
+}
+
+.player-bar {
+  transition: border-color 0.25s ease;
+}
+
+.player-bar:has(.audio-ready) {
+  border-color: #3a3937;
+}
+
+.player-copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .catalogue-card:hover {
+    transform: none;
+  }
+
+  .catalogue-grid {
+    row-gap: 42px;
+  }
+
+  .music-info {
+    gap: 12px;
+  }
+
+  .release-description {
+    max-width: 95%;
+  }
+
+  .player-copy {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .music-info {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .track-length {
+    margin-top: 0;
+  }
+
+  .catalogue-tools {
+    gap: 10px;
+  }
 }
 
 /* Tour page: clear row-based event grid */
