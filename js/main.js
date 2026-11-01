@@ -293,3 +293,45 @@ for (let i = 0; i < tourFilterButtons.length; i++) {
   });
 }
 
+
+// --------------------------------------------------
+// 8. CONTACT FORM + LIVE CHARACTER COUNTER
+// --------------------------------------------------
+
+var messageInput = document.getElementById("message");
+var contactForms = document.getElementsByClassName("contact-form");
+
+if (messageInput != null && messageInput.parentElement != null) {
+  var characterCounter = document.createElement("p");
+
+  characterCounter.setAttribute("class", "message-character-count");
+  characterCounter.setAttribute("aria-live", "polite");
+
+  messageInput.parentElement.appendChild(characterCounter);
+
+  function updateMessageCount() {
+    var maxLength = messageInput.getAttribute("maxlength");
+    var currentLength = messageInput.value.length;
+
+    characterCounter.textContent =
+      currentLength + " / " + maxLength +
+      " characters (minimum 10)";
+
+    if (currentLength >= 450) {
+      characterCounter.style.color = "#ff5a55";
+    } else {
+      characterCounter.style.color = "#a4a09d";
+    }
+  }
+
+  updateMessageCount();
+  messageInput.addEventListener("input", updateMessageCount);
+}
+
+// Required fields are validated by the browser before submission.
+for (var k = 0; k < contactForms.length; k++) {
+  contactForms[k].addEventListener("submit", function (event) {
+    event.preventDefault();
+    window.location.href = "thank-you.html";
+  });
+}
