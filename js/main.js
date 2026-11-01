@@ -1,20 +1,3 @@
-/*
-  MODERN MUSICIAN - DOM PRACTICE VERSION
-
-  This project uses the JavaScript concepts from the shared class examples:
-  variables, functions, objects, loops, strings, arrays/HTMLCollections,
-  DOM selection, styles, attributes, createElement(), appendChild(),
-  parentElement, and click/input/change/keydown/submit events.
-
-  No framework is used. Read the numbered sections alongside DOM_GUIDE.md.
-*/
-
-// --------------------------------------------------
-// 1. SMALL HELPERS TO ADD / REMOVE CSS CLASSES
-// --------------------------------------------------
-// This uses getAttribute(), setAttribute(), hasAttribute(), split(),
-// indexOf(), loops, and removeAttribute() from the DOM/string lessons.
-
 function hasCssClass(element, className) {
   if (element == null || !element.hasAttribute("class")) {
     return false;
@@ -58,10 +41,6 @@ function removeCssClass(element, className) {
   }
 }
 
-// --------------------------------------------------
-// 2. SELECT ELEMENTS + MOBILE NAVIGATION
-// --------------------------------------------------
-// The page has one menu button and one navigation list.
 var menuToggleItems = document.getElementsByClassName("menu-toggle");
 var menuToggle = menuToggleItems[0];
 var navLinks = document.getElementById("nav-links");
@@ -93,14 +72,12 @@ for (var a = 0; a < navLinkItems.length; a++) {
   navLinkItems[a].addEventListener("click", closeMenu);
 }
 
-// If the browser window becomes wider while the menu is open, close it.
 window.addEventListener("resize", function () {
   if (window.innerWidth > 700) {
     closeMenu();
   }
 });
 
-// Mark the current page by reading each link's data-page attribute.
 var pageName = window.location.pathname.split("/").pop();
 if (pageName === "" || pageName == null) {
   pageName = "index.html";
@@ -117,18 +94,11 @@ for (var b = 0; b < navLinkItems.length; b++) {
     }
   }
 }
-
-// --------------------------------------------------
-// 3. MAKE THE PAGE CONTENT VISIBLE
-// --------------------------------------------------
-// CSS handles the appearance. This loop adds the class expected by the CSS.
 var revealItems = document.getElementsByClassName("reveal");
 for (var c = 0; c < revealItems.length; c++) {
   addCssClass(revealItems[c], "is-visible");
 }
 
-// 4. MUSIC TRACK SELECTION
-// --------------------------------------------------
 var tracks = {
   midnight: {
     src: "assets/audio/midnight-dreams.mp3"
