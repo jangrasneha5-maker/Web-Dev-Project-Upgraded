@@ -276,3 +276,50 @@ if (musicSearch != null) {
 if (genreFilter != null) {
   genreFilter.addEventListener("change", filterMusic);
 }
+
+// --------------------------------------------------
+// 6. FILTER TOUR DATES
+// --------------------------------------------------
+
+var tourFilterButtons = document.getElementsByClassName("filter-chip");
+var tourEvents = document.getElementsByClassName("tour-event");
+
+function filterTours(selectedFilter) {
+
+  for (var g = 0; g < tourEvents.length; g++) {
+
+    var eventStatus = tourEvents[g].getAttribute("data-status");
+
+    if (
+      selectedFilter === "all" ||
+      eventStatus === selectedFilter
+    ) {
+      tourEvents[g].style.display = "";
+    } else {
+      tourEvents[g].style.display = "none";
+    }
+  }
+
+  for (var h = 0; h < tourFilterButtons.length; h++) {
+
+    if (
+      tourFilterButtons[h].getAttribute("data-tour-filter") === selectedFilter
+    ) {
+      addCssClass(tourFilterButtons[h], "active");
+    } else {
+      removeCssClass(tourFilterButtons[h], "active");
+    }
+  }
+}
+
+for (let i = 0; i < tourFilterButtons.length; i++) {
+
+  tourFilterButtons[i].addEventListener("click", function () {
+
+    var selectedFilter =
+      tourFilterButtons[i].getAttribute("data-tour-filter");
+
+    filterTours(selectedFilter);
+  });
+}
+
